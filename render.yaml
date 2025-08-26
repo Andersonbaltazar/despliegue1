@@ -7,6 +7,8 @@ services:
     plan: free
     branch: main
     healthCheckPath: /
+    buildCommand: ""
+    startCommand: ""
     envVars:
       - key: APP_ENV
         value: production
@@ -14,15 +16,29 @@ services:
         value: "false"
       - key: APP_KEY
         generateValue: true
+      - key: APP_NAME
+        value: Laravel App
+      - key: APP_URL
+        sync: false
       - key: DB_CONNECTION
         value: sqlite
       - key: DB_DATABASE
         value: /var/www/html/database/database.sqlite
       - key: LOG_CHANNEL
         value: single
+      - key: LOG_LEVEL
+        value: error
       - key: SESSION_DRIVER
         value: file
+      - key: SESSION_LIFETIME
+        value: "120"
       - key: CACHE_DRIVER
         value: file
       - key: QUEUE_CONNECTION
         value: sync
+      - key: BROADCAST_DRIVER
+        value: log
+      - key: FILESYSTEM_DISK
+        value: local
+      - key: MAIL_MAILER
+        value: log
