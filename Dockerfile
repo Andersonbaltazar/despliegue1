@@ -1,19 +1,38 @@
 # Dockerfile para Laravel en producción
 FROM php:8.2-fpm-alpine
 
-# Instalar dependencias del sistema
-RUN apk add --no-cache \
+# Variables de entorno
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Instalar dependencias del sistema paso a paso
+RUN apk update && apk add --no-cache \
     nginx \
-    supervisor \
+    supervisor
+
+RUN apk add --no-cache \
     curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
     zip \
     unzip \
     git \
-    sqlite \
-    && docker-php-ext-install pdo_sqlite pdo_mysql mbstring exif pcntl bcmath gd
+    sqlite
+
+# Instalar dependencias de desarrollo para PHP
+RUN apk add --no-cache \
+    libpng-dev \
+    oniguruma-dev \
+    libxml2-dev \
+    sqlite-dev
+
+# Limpiar caché
+RUN rm -rf /var/cache/apk/*
+
+# Instalar extensiones PHP una por una
+RUN docker-php-ext-install pdo_sqlite
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install exif
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install gd
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
