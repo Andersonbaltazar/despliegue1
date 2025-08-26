@@ -5,7 +5,7 @@ FROM php:8.2-fpm-alpine
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Instalar dependencias del sistema paso a paso
-RUN apk update && apk add --no-cache \
+RUN apk update --no-cache && apk add --no-cache \
     nginx \
     supervisor
 
@@ -48,12 +48,9 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # El archivo .env se creará en el script de inicio, no lo copiamos aquí
 
-# Configurar permisos
+# Configurar permisos básicos (los permisos específicos se configuran en el script de inicio)
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache \
-    && chmod 664 /var/www/html/database/database.sqlite
+    && chmod -R 755 /var/www/html
 
 # Configurar Nginx
 COPY nginx/default.conf /etc/nginx/nginx.conf
