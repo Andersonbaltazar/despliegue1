@@ -27,8 +27,7 @@ COPY laravel/ .
 # Instalar dependencias de PHP
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-# Copiar archivo de entorno de producción
-COPY laravel/.env.production .env
+# El archivo .env se creará en el script de inicio, no lo copiamos aquí
 
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html \
